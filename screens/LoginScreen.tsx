@@ -1,110 +1,75 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/Navigation';
+import React, { useState } from "react";
+import { View, TextInput, Button, Text, StyleSheet, Alert } from "react-native";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../firebase-config";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types";
 
-type LoginScreenProp = StackNavigationProp<RootStackParams, 'LoginScreen'>;
+initializeApp(firebaseConfig);
 
-export const LoginScreen = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const navigation = useNavigation<LoginScreenProp>();
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'LoginScreen'>;
 
-  const handleLogin = async () => {
-    if (username && password ) {
+export default function LoginScreen({ navigation }: LoginScreenProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-      const sesiones = JSON.parse(await AsyncStorage.getItem('usuarios')||"[]") as any[]
-
-      if(sesiones.length) {
-        const siHay = sesiones.filter((sesion)=>sesion.username === username && sesion.password===password)[0];
-        if(siHay){
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'HomeScreen' }],
-          });
-        } else {
-          Alert.alert('Error', 'Credenciales inválidas');
-        }
-      } else {
-        Alert.alert('Error', 'Credenciales inválidas');
-      }
-
-      
-    } else {
-      Alert.alert('Error', 'Credenciales vacias');
-    }
+  const handleLogin = () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        Alert.alert("Login Successful", `Welcome back, ${user.email}!`);
+        navigation.navigate("Root", { screen: "Home" });
+// Navigate to Home
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        Alert.alert("Login Failed", errorMessage);
+      });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Usuario</Text>
+      <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      <Text style={styles.label}>Contraseña</Text>
       <TextInput
         style={styles.input}
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.label}>Iniciar Sesión</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.button} onPress={
-        ()=>{
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'RegisterScreen' }],
-          });
-        }
-      }>
-        <Text style={styles.label}>Registrarse</Text>
-      </TouchableOpacity>
-
-  
-      
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-        <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: 'black'
+    justifyContent: "center",
+    padding: 16,
   },
-  label: {
-    marginBottom: 10,
-    fontSize: 18,
-    textAlign:'center',
-    margin:8
-  },
-  button:{
-    alignContent:'center',
-    backgroundColor:'green',
-    margin:10
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+    textAlign: "center",
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 8,
-  },
-  forgotPasswordText: {
-    marginTop: 15,
-    color: 'white',
-    textAlign: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 8,
   },
 });

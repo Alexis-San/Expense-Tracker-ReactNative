@@ -4,8 +4,6 @@ import AcccountCard from "../components/AcccountCard";
 import Transactions from "../components/Transactions";
 import { useContext, useMemo } from "react";
 import AppContext from "../context/AppContext";
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/Navigation';
 export default function HomeScreen({
   navigation,
   route,
@@ -27,7 +25,7 @@ export default function HomeScreen({
       .reduce((acc, curr) => acc + curr.amount, 0);
   }, [transactions]);
 
-  type HomeScreenProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
+  
   return (
     <SafeAreaView>
       <ScrollView

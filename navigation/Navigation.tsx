@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 //import { DetailScreen } from '../screens/DetailScreen';
@@ -50,8 +51,10 @@ export const Navigation = () => {
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       {/* <Stack.Screen name="DetailScreen" component={DetailScreen} /> */}
+     /*
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
       <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} /> 
     </Stack.Navigator>
   );
 };
+*/

@@ -1,18 +1,13 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
-import {
+import { 
   AntDesign,
   FontAwesome,
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -33,6 +28,7 @@ import AddIncome from "../screens/AddIncome";
 import MyCardsScreen from "../screens/MyCardsScreen";
 import StartScreen from "../screens/StartScreen";
 import AddCategoryModal from "../screens/AddCategoryModal";
+import LoginScreen from "../screens/LoginScreen";
 
 export default function Navigation() {
   return (
@@ -42,15 +38,27 @@ export default function Navigation() {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const value = await AsyncStorage.getItem("cashBalanceAdded");
+      if (value === null) {
+        setIsLoggedIn(false);
+        await AsyncStorage.setItem("cashBalanceAdded", "true");
+      } else {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={isLoggedIn ? "Root" : "LoginScreen"}>
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -68,12 +76,19 @@ function RootNavigator() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen
           options={{
             title: "Add Card",
             headerTitleAlign: "center",
-          headerShadowVisible: false,
+            headerShadowVisible: false,
           }}
           name="AddCardModal"
           component={AddCardModal}
@@ -82,7 +97,7 @@ function RootNavigator() {
           options={{
             title: "Add Category",
             headerTitleAlign: "center",
-          headerShadowVisible: false,
+            headerShadowVisible: false,
           }}
           name="AddCategoryModal"
           component={AddCategoryModal}
@@ -91,6 +106,7 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
 const AddStack = createNativeStackNavigator<AddStackParamList>();
 
 function AddTransNavigator() {
@@ -123,34 +139,13 @@ function AddTransNavigator() {
           headerShadowVisible: false,
         }}
       />
-      {/* <AddStack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </AddStack.Group> */}
     </AddStack.Navigator>
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const navigation = useNavigation();
-  useEffect(() => {
-    AsyncStorage.getItem("cashBalanceAdded").then((value) => {
-      if (value === null) {
-        AsyncStorage.setItem("cashBalanceAdded", "true");
-        navigation.navigate("StartScreen");
-        // navigation.navigate("AddCardModal", {
-        //   cardId: "1",
-        // });
-      }
-    });
-  }, []);
-
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -161,7 +156,7 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
-        options={({ navigation }: RootTabScreenProps<"Home">) => ({
+        options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ color }) => (
             <MaterialIcons
@@ -171,17 +166,13 @@ function BottomTabNavigator() {
               style={{ marginBottom: -3 }}
             />
           ),
-          headerTitleAlign: "center",
-          headerShadowVisible: false,
-        })}
+        }}
       />
       <BottomTab.Screen
         name="Overview"
         component={OverviewScreen}
         options={{
           tabBarLabel: () => null,
-          headerTitleAlign: "center",
-          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <MaterialIcons
               name="insert-chart"
@@ -197,9 +188,7 @@ function BottomTabNavigator() {
         component={AddTransNavigator}
         options={{
           tabBarLabel: () => null,
-          headerTitleAlign: "center",
           headerShown: false,
-          headerShadowVisible: false,
           tabBarIcon: ({ color }) => (
             <AntDesign
               name="pluscircle"
@@ -215,9 +204,7 @@ function BottomTabNavigator() {
         component={MyCardsScreen}
         options={({ navigation }: RootTabScreenProps<"MyCards">) => ({
           tabBarLabel: () => null,
-          headerTitleAlign: "center",
           headerShown: true,
-          headerShadowVisible: false,
           title: "My Cards",
           tabBarIcon: ({ color }) => (
             <Ionicons
@@ -240,8 +227,6 @@ function BottomTabNavigator() {
               <AntDesign
                 name="plus"
                 size={22}
-                // color={Colors[colorScheme].text}
-                style={{}}
               />
             </Pressable>
           ),
@@ -254,9 +239,6 @@ function BottomTabNavigator() {
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
