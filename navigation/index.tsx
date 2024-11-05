@@ -1,8 +1,3 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
 import {
   AntDesign,
   FontAwesome,
@@ -33,6 +28,9 @@ import AddIncome from "../screens/AddIncome";
 import MyCardsScreen from "../screens/MyCardsScreen";
 import StartScreen from "../screens/StartScreen";
 import AddCategoryModal from "../screens/AddCategoryModal";
+import { LoginScreen } from "../screens/LoginScreen";
+import { RegisterScreen } from "../screens/RegisterScreen";
+import { ForgotPasswordScreen } from "../screens/ForgotPasswordScreen";
 
 export default function Navigation() {
   return (
@@ -42,15 +40,11 @@ export default function Navigation() {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="LoginScreen">
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -68,12 +62,33 @@ function RootNavigator() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen
           options={{
             title: "Add Card",
             headerTitleAlign: "center",
-          headerShadowVisible: false,
+            headerShadowVisible: false,
           }}
           name="AddCardModal"
           component={AddCardModal}
@@ -82,7 +97,7 @@ function RootNavigator() {
           options={{
             title: "Add Category",
             headerTitleAlign: "center",
-          headerShadowVisible: false,
+            headerShadowVisible: false,
           }}
           name="AddCategoryModal"
           component={AddCategoryModal}
@@ -91,6 +106,7 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
 const AddStack = createNativeStackNavigator<AddStackParamList>();
 
 function AddTransNavigator() {
@@ -123,17 +139,9 @@ function AddTransNavigator() {
           headerShadowVisible: false,
         }}
       />
-      {/* <AddStack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </AddStack.Group> */}
     </AddStack.Navigator>
   );
 }
-
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
@@ -144,9 +152,6 @@ function BottomTabNavigator() {
       if (value === null) {
         AsyncStorage.setItem("cashBalanceAdded", "true");
         navigation.navigate("StartScreen");
-        // navigation.navigate("AddCardModal", {
-        //   cardId: "1",
-        // });
       }
     });
   }, []);
@@ -240,8 +245,6 @@ function BottomTabNavigator() {
               <AntDesign
                 name="plus"
                 size={22}
-                // color={Colors[colorScheme].text}
-                style={{}}
               />
             </Pressable>
           ),
@@ -252,14 +255,4 @@ function BottomTabNavigator() {
       />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }

@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, Text, Alert, TouchableOpacity } from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/Navigation';
+import { RootStackParams } from '../navigation/AppNavigation';
 
 type LoginScreenProp = StackNavigationProp<RootStackParams, 'LoginScreen'>;
 

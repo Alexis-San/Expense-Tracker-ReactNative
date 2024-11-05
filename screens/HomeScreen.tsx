@@ -5,7 +5,8 @@ import Transactions from "../components/Transactions";
 import { useContext, useMemo } from "react";
 import AppContext from "../context/AppContext";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/Navigation';
+import { RootStackParamList } from '../types';
+
 export default function HomeScreen({
   navigation,
   route,
@@ -27,13 +28,13 @@ export default function HomeScreen({
       .reduce((acc, curr) => acc + curr.amount, 0);
   }, [transactions]);
 
-  type HomeScreenProp = StackNavigationProp<RootStackParams, 'HomeScreen'>;
+  type HomeScreenProp = StackNavigationProp<RootStackParamList, 'HomeScreen'>;
+
   return (
     <SafeAreaView>
       <ScrollView
         contentContainerStyle={{
           alignItems: "center",
-          // flex: 1,
           backgroundColor: "white",
           paddingTop: 20,
           minHeight: "100%",

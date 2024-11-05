@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParams } from '../navigator/Navigation';
+import RootStackParams from '../navigation/AppNavigation';
 
 interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'> {}
 

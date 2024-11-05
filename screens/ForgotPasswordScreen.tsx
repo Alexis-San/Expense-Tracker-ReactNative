@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParams } from '../navigation/Navigation';
+import { RootStackParamList } from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type ForgotPasswordScreenProp = StackNavigationProp<RootStackParams, 'ForgotPasswordScreen'>;
+type ForgotPasswordScreenProp = StackNavigationProp<RootStackParamList, 'ForgotPasswordScreen'>;
 
 export const ForgotPasswordScreen = () => {
 
@@ -33,15 +33,11 @@ export const ForgotPasswordScreen = () => {
     } else {
       Alert.alert("Error", "Algo salió mal.");
     }
-
-
   };
 
   return (
     <View style={styles.container}>
-
       <Text style={styles.label}>Ingresa tu nombre de usuario</Text>
-      
       <TextInput
         style={styles.input}
         value={username}
@@ -61,12 +57,9 @@ export const ForgotPasswordScreen = () => {
         onChangeText={setPass2}
         secureTextEntry
       />
-
-
       <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
         <Text style={styles.label}>Recuperar Contraseña</Text>
       </TouchableOpacity>
-
     </View>
   );
 };
