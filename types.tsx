@@ -25,6 +25,7 @@ export type RootStackParamList = {
   StartScreen: undefined;
   LoginScreen: undefined;
   Home: undefined; // Added Home
+  RegisterScreen: undefined; // Asegúrate de definir la pantalla de registro
 };
 
 export type AddStackParamList = {
@@ -40,7 +41,7 @@ export type RootTabParamList = {
   Home: undefined;
   Overview: undefined;
   AddStack: undefined;
-  MyCards: undefined;
+  MyCards: undefined; 
   Profile: undefined;
 };
 

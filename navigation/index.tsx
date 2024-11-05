@@ -29,6 +29,7 @@ import MyCardsScreen from "../screens/MyCardsScreen";
 import StartScreen from "../screens/StartScreen";
 import AddCategoryModal from "../screens/AddCategoryModal";
 import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen"; // Importa la pantalla de registro
 
 export default function Navigation() {
   return (
@@ -81,6 +82,15 @@ function RootNavigator() {
         component={LoginScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      {/* Añadimos la pantalla de registro */}
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          title: "Registrarse",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
