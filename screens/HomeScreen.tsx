@@ -4,7 +4,6 @@ import AcccountCard from "../components/AcccountCard";
 import Transactions from "../components/Transactions";
 import { useContext, useMemo } from "react";
 import AppContext from "../context/AppContext";
-
 export default function HomeScreen({
   navigation,
   route,
@@ -25,6 +24,8 @@ export default function HomeScreen({
       .filter((transaction) => transaction.type === "expense")
       .reduce((acc, curr) => acc + curr.amount, 0);
   }, [transactions]);
+
+  
   return (
     <SafeAreaView>
       <ScrollView

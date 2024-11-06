@@ -1,8 +1,3 @@
-/**
- * Learn more about using TypeScript with React Navigation:
- * https://reactnavigation.org/docs/typescript/
- */
-
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
@@ -28,6 +23,9 @@ export type RootStackParamList = {
   };
   NotFound: undefined;
   StartScreen: undefined;
+  LoginScreen: undefined;
+  Home: undefined; // Added Home
+  RegisterScreen: undefined; // Asegúrate de definir la pantalla de registro
 };
 
 export type AddStackParamList = {
@@ -43,7 +41,7 @@ export type RootTabParamList = {
   Home: undefined;
   Overview: undefined;
   AddStack: undefined;
-  MyCards: undefined;
+  MyCards: undefined; 
   Profile: undefined;
 };
 

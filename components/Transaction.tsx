@@ -42,7 +42,7 @@ const TransactionComponent = ({
         } font-medium `}
       >
         {transaction.type === "expense" ? "-" : "+"}
-        &#8377;
+        G;
         {transaction.amount}
       </Text>
     </View>
